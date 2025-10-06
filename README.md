@@ -64,4 +64,28 @@ Create a low-privilege DB user for the application:
 ```sudo chmod 644 /var/www/html/*.php```
 9. Restart the apache server
    ```systemctl restart apache2.service```
+
+**Configuring OWASP Core Rule Set (CRS)***
+
+``` cd /usr/share```
+
+```sudo git clone https://github.com/coreruleset/coreruleset.git /usr/share/modsecurity-crs```
+
+```sudo cp /usr/share/modsecurity-crs/crs-setup.conf.example /usr/share/modsecurity-crs/crs-setup.conf ```
+
+
+Then include CRS from the Apache ModSecurity conf. Edit /etc/apache2/mods-available/security2.conf (or add a new include under /etc/modsecurity/) and ensure it includes something like:
+
+```# /etc/apache2/mods-available/security2.conf (snippet)```
+
+```SecDataDir /var/cache/modsecurity```
+
+```IncludeOptional /usr/share/modsecurity-crs/crs-setup.conf```
+
+```IncludeOptional /usr/share/modsecurity-crs/rules/*.conf```
+
+Restart the Apache:
+ ```systemctl restart apache2.service```
+
+
 10. Visit ```http://3.84.212.240/index.php``` or ```http://3.84.212.240/secure.php```
